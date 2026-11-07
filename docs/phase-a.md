@@ -67,9 +67,8 @@ The app targets Windows 10 build 19041 or newer, with Windows 11 x64 the primary
 validation target. Native capability guards can impose stricter requirements.
 The app and helper are unpackaged and self-contained development builds.
 
-The helper cross-build succeeds on Linux. WinUI XAML compilation and desktop
-execution require Windows; platform-neutral tests and temporary C# compile checks
-cannot replace them. The Windows workflow has executed the five test suites;
-current native build/startup evidence is recorded in `validation-results.md`
-and the workflow run. Live configuration recovery and visual acceptance remain
-separate Windows requirements.
+The helper cross-build succeeds on Linux. The complete Windows WinUI build,
+five test suites and bounded startup observation have passed in hosted CI.
+Platform-neutral tests and temporary C# checks cannot replace that native run.
+Evidence and limits are recorded in `validation-results.md`. Live configuration
+recovery and manual visual acceptance remain separate Windows requirements.

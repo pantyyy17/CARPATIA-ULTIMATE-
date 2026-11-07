@@ -101,7 +101,10 @@ Executed with .NET SDK 10.0.403 on Linux x64 and hosted Windows CI:
 
 The [Windows workflow](https://github.com/pantyyy17/CARPATIA-ULTIMATE-/actions/workflows/windows.yml)
 builds the full app/helper, checks the payload and observes read-only startup.
-Its live status records the current native build/startup result. Startup survival
+[Run 42367836867](https://github.com/pantyyy17/CARPATIA-ULTIMATE-/actions/runs/42367836867)
+passed the complete Release win-x64 build with zero warnings/errors and the
+12-second startup observation. Its unsigned development binary is available in
+the run's artifacts. Startup survival
 does not establish visual quality or standard-user behavior; hosted CI may use
 an elevated token. No native configuration write is tested by this workflow.
 

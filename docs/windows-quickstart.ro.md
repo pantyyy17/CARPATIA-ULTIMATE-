@@ -1,5 +1,15 @@
 # Prima verificare pe Windows 11
 
+Buildul Windows de test este disponibil în
+[GitHub Actions](https://github.com/pantyyy17/CARPATIA-ULTIMATE-/actions/runs/42367836867).
+După autentificarea în GitHub, descarcă artifactul
+`carpatia-ultimate-unsigned-win-x64`, dezarhivează tot și păstrează folderul
+`Helper` lângă executabil. Buildul și observarea pornirii au trecut în CI;
+verificarea vizuală și Apply/Restore pe PC rămân separate. Este un build de
+dezvoltare nesemnat, nu un installer final.
+
+Pentru compilarea surselor și raportul de pe PC-ul tău:
+
 Dezarhivează proiectul într-un folder al tău. Deschide PowerShell normal, fără
 „Run as administrator”, în folderul care conține `Carpatia.Ultimate.slnx`.
 

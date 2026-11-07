@@ -1,87 +1,87 @@
 # Actual validation results — Phase B source
 
-Date: 2026-11-06. Environment: Linux x64, Debian 13, .NET SDK 10.0.403. No Windows
-desktop or physical tuning hardware was available. No live Windows configuration
-write, UAC elevation or effective recovery-ACL test was executed.
+Validation includes Linux development checks and hosted Windows CI on 2026-11-07,
+using .NET SDK 10.0.403. Native configuration writes, UAC interactions and
+protected-journal filesystem behavior have not been exercised on a real test PC.
 
-## Executed automated tests
+## Automated test results
 
-| Test project | Passed | Skipped | Failed |
-| --- | ---: | ---: | ---: |
-| `Carpatia.Ultimate.Tests` — engine/recovery | 48 | 0 | 0 |
-| `Carpatia.Ultimate.Control.Tests` — typed review flow | 73 | 0 | 0 |
-| `Carpatia.Ultimate.Broker.Tests` — protocol/security-policy logic | 50 | 0 | 0 |
-| `Carpatia.Ultimate.Platform.Tests` — CPU and network | 71 | 3 | 0 |
-| `Carpatia.Ultimate.Diagnostics.Tests` | 14 | 2 | 0 |
-| **Total** | **256** | **5** | **0** |
+| Test project | Linux passed / skipped | Windows passed / skipped |
+| --- | ---: | ---: |
+| Engine and recovery | 48 / 0 | 48 / 0 |
+| Typed review and control flow | 73 / 0 | 73 / 0 |
+| Broker protocol/security-policy logic | 50 / 0 | 50 / 0 |
+| CPU and network platform adapters | 71 / 3 | 73 / 1 |
+| Diagnostics | 14 / 2 | 16 / 0 |
+| **Total** | **256 / 5** | **260 / 1** |
 
-The CPU subset passed 28 cases and skipped one native read-only Windows case.
-The network subset passed 43 and skipped two Windows-specific cases. These
-platform skips concern native CPU reads, Windows PowerShell parsing and the
-unsupported IPv6 DNS guard; the diagnostic skips concern actual Windows hardware
-reads/samples. Windows may skip different platform-guard cases.
+No test failed in either environment. Windows executes the native read-only CPU
+policy and hardware checks, PowerShell parse check and IPv6-DNS unavailable
+check. The non-Windows guard case is skipped on Windows. Most mutation tests use
+isolated backends; these results do not prove real Windows Apply/Restore.
 
-Tests execute real planning, control dispatch and persistent journal code with
-isolated typed adapters/backends for writes. They cover compatibility, value and
-resource identity checks, admin/risk gates, immutable reviewed state, stale/future
-or altered tickets, confirmation cancellation, repeated actions, conflict
-symmetry, external edits, partial writes, activation failure, interruption,
-corrupt state, nullability, schema changes and cooperating engine instances.
-Broker tests cover framing and security-policy rejection decisions, not real UAC,
-named-pipe ACL enforcement or protected filesystem behavior.
+Tests cover compatibility, identity, admin/risk gates, immutable review tickets,
+confirmation races, repeated operations, external edits, partial writes,
+activation failure, interruption, corrupt snapshots, schema changes and leases.
+Broker tests establish protocol/security-policy decisions, not effective UAC or
+native protected-storage permissions.
 
-## Build and static checks
+## Successful native Windows build and startup observation
 
-- Engine, Control, Broker and platform projects compile as dependencies of their
-  passing Release test suites.
-- The self-contained `win-x64` Windows helper cross-build succeeded with zero
-  warnings/errors. Its executable was not run.
-- Direct execution of the app's `CopyOneShotHelper` MSBuild target succeeded and
-  placed `Helper/Carpatia.Ultimate.Helper.exe` under the app target directory.
-  This is payload-copy verification, not a complete WinUI build.
-- App dependency restore, including stable Windows App SDK WinUI 2.6.5, passed.
-- Phase B app C# compiled against actual restored WinUI/Windows reference
-  assemblies using temporary XAML-generated-member stubs. A companion static
-  check examined 692 XAML property/binding paths. The final rerun, including
-  unloaded-view and concurrent-dialog guards, passed with zero warnings/errors.
-  Temporary stubs are not shipped. Generated XAML binding code and runtime
-  resource resolution still require Windows.
-- Project/manifest/theme/view XML and workflow YAML are checked as syntax, not
-  evidence of native XAML semantic validity or a hosted CI run.
+[Windows CI run 42367836867](https://github.com/pantyyy17/CARPATIA-ULTIMATE-/actions/runs/42367836867)
+passed at source commit `7f40379701744699f2e35f1973f3328880f7cf6c`:
 
-## Full WinUI build limitation
+- All five test suites: 260 passed, one skipped, zero failed.
+- Full Release win-x64 WinUI/XAML application and helper build: succeeded,
+  zero build warnings and errors.
+- Main app and complete one-shot helper payload: required files present.
+- Read-only startup observation: process remained alive through the 12-second
+  observation window, with no direct helper child observed; only the started
+  app process was cleaned up.
+- Startup diagnostics, TRX reports and an unsigned development build were retained
+  as workflow artifacts.
 
-The Linux app build reaches the Windows-only XAML compiler and cannot execute it:
+The observation records the launching token; hosted CI may use an elevated
+account. It requests no elevation and invokes no configuration operation.
+Process survival does not validate rendering, standard-user behavior,
+accessibility, navigation or actual hardware tuning.
 
-```text
-XamlCompiler.exe: Exec format error
-XamlCompiler output file .../output.json was not created.
-```
+The native compiler verified fixes for runtime-template metadata, the generated
+busy-state method call and overlapping default asset globs. These were not
+established by the earlier Linux C# stub check.
 
-This host limitation does not establish that the WinUI build passes on Windows.
-The supplied Windows workflow builds the complete app/helper, asserts the packaged
-helper payload and runs all five test projects. No remote workflow was invoked.
+## Linux build and static checks
+
+Linux cannot execute the native Windows XAML compiler. Its direct full-app build
+stops at `XamlCompiler.exe: Exec format error`; the Windows run above supplies the
+native compilation evidence instead. Engine/platform/control/broker libraries
+and the self-contained Windows helper cross-build succeeded on Linux.
+
+App C# and 692 XAML property/binding-source references were checked against real
+WinUI/Windows references using temporary generated-member stubs. These stubs are
+not shipped and do not replace native XAML compilation or runtime validation.
+The final instance-method binding and single asset Content item were also checked.
 
 ## Windows handoff runner
 
-The Windows handoff script `scripts/Validate-Windows.ps1` was parsed with official
-PowerShell 7.6.9 on Linux. Focused process checks preserved a nonzero native exit
-code, stderr and arguments containing spaces, quotes, empty strings and trailing
-backslashes. Its actual Linux invocation refused native validation, returned
-exit code 2 and still created a valid results ZIP with a Blocked summary. These
-checks do not validate Windows PowerShell 5.1, WinUI compilation or Windows
-process execution. The existing 256-pass/5-skip test baseline is unchanged.
+`Validate-Windows.ps1` was parsed with official PowerShell 7.6.9 on Linux.
+Focused process checks preserved exit codes, stderr, spaces, quotes, empty
+arguments and trailing backslashes. Linux execution correctly returned a Blocked
+summary and results ZIP. Its native Windows execution remains a separate check.
 
-## Unexecuted and required
+`Smoke-WindowsStartup.ps1` was parsed and its Linux refusal path checked, then
+executed successfully by the Windows CI run above. It is separate from the
+normal validation runner, which never launches an executable.
 
-- Native Windows XAML compilation, launch, visual/accessibility review and display scaling.
-- Live Windows hardware/provider accuracy and the Windows-only test cases.
-- Actual CPU/DNS/MTU/TCP/RSS writes, Apply/Verify/Restore and interrupted-write recovery.
-- UAC, same-user pipe ACLs, protected journal ownership/DACL/pinning and filesystem attacks.
-- App startup/idle resource measurement, signed install/upgrade/uninstall and release review.
+## Still required
 
-The first eight native operation families are Implemented, Hardware Test Pending.
-Full profile execution, GPU tuning, services/debloat and later milestones are not
-claimed complete. The helper cross-build is a development artifact, not a
-Windows-validated installer. Follow [Windows acceptance](windows-validation.md)
-before release or Phase C expansion.
+- Manual Windows 11 UI, display scaling, contrast, keyboard and Narrator acceptance.
+- Standard-user startup and physical hardware/provider accuracy beyond the CI VM.
+- Real CPU/DNS/MTU/TCP/RSS Apply/Verify/Restore, including interrupted-write recovery.
+- UAC, same-user IPC ACLs, protected journal ownership/pinning and filesystem tests.
+- Startup/idle resource measurement, signing, installers and release QA.
+
+Native modification paths remain Implemented, Hardware Test Pending. Full profile
+execution, GPU tuning, services/debloat and later milestones are not complete.
+The artifact is an unsigned development build, not a signed installer. Follow
+[Windows acceptance](windows-validation.md) before release or Phase C expansion.

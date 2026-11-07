@@ -4,12 +4,13 @@
 
 The first CPU/network operation families now have typed adapters, UI review,
 one-shot helper routing, durable snapshots, verification and reviewed Restore.
-Their fake-backed logic tests pass. Native Windows execution and failure recovery
-are still pending. Do not expand into Phase C until disposable Windows tests
+Their isolated tests and selected read-only Windows checks pass. The complete
+Windows build and bounded process-startup observation also pass. Native writes
+and failure recovery remain pending. Do not expand into Phase C until disposable Windows tests
 verify the first operations and resolve any critical restoration defect.
 
-The immediate gate is a successful full WinUI build and interactive acceptance,
-then real CPU/network Apply/Verify/Restore, explicit confirmation, protected
+The immediate gate is interactive Windows acceptance, followed by real
+CPU/network Apply/Verify/Restore, explicit confirmation, protected
 storage/UAC tests, partial-write recovery and documented hardware compatibility.
 No performance benefit is established by matching configuration readback.
 
