@@ -2,7 +2,13 @@ name: Windows build and Phase B tests
 
 on:
   push:
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:
@@ -47,6 +53,16 @@ jobs:
             }
           }
           Write-Host 'App and one-shot helper payloads are present. No configuration operation was executed.'
+      - name: Observe read-only application startup
+        shell: pwsh
+        run: .\scripts\Smoke-WindowsStartup.ps1 -ExecutablePath .\src\Carpatia.Ultimate.App\bin\x64\Release\net10.0-windows10.0.19041.0\win-x64\Carpatia.Ultimate.exe -OutputDirectory .\StartupResults
+      - name: Retain startup observation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-startup-observation
+          path: StartupResults/*
+          if-no-files-found: ignore
       - name: Retain test reports
         if: always()
         uses: actions/upload-artifact@v4

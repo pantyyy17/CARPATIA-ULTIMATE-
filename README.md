@@ -23,8 +23,8 @@ and restrained navigation. The application uses the product name and functional
 requirements in the [engineering directive](docs/engineering-directive.md).
 
 The source now includes the first eight CPU/network operation families, a typed
-review flow and a one-shot elevated helper. **Windows writes, UAC, recovery ACLs
-and the interactive application have not been exercised on Windows.** These
+review flow and a one-shot elevated helper. **Live Windows writes, UAC, recovery
+ACLs and manual interface acceptance remain unverified.** These
 integrations are **Implemented, Hardware Test Pending**, not a release-ready
 optimizer or a claim of measured performance improvement.
 
@@ -88,22 +88,25 @@ LocalAppData records are not imported. See [recovery](docs/recovery.md).
 
 ## Actual validation
 
-Executed on Linux x64 with .NET SDK 10.0.403:
+Executed with .NET SDK 10.0.403 on Linux x64 and hosted Windows CI:
 
-| Suite/check | Result |
-| --- | --- |
-| Engine and recovery | 48 passed |
-| Typed control/review flow | 73 passed |
-| Broker protocol and security-policy logic | 50 passed |
-| CPU/network adapters with injected backends | 71 passed, 3 Windows-only tests skipped |
-| Diagnostics | 14 passed, 2 Windows-only tests skipped |
-| **Automated test total** | **256 passed, 5 skipped, 0 failed** |
-| Self-contained Windows helper cross-build | Passed, zero warnings/errors; executable not run |
-| Full WinUI/XAML build and GUI | Requires Windows; unexecuted |
+| Suite | Linux | Windows |
+| --- | --- | --- |
+| Engine and recovery | 48 passed | 48 passed |
+| Typed control/review flow | 73 passed | 73 passed |
+| Broker protocol/security-policy logic | 50 passed | 50 passed |
+| CPU/network adapters | 71 passed, 3 skipped | 73 passed, 1 skipped |
+| Diagnostics | 14 passed, 2 skipped | 16 passed |
+| **Total** | **256 passed, 5 skipped** | **260 passed, 1 skipped** |
 
-These tests validate isolated logic and fake-backed state changes, not live
-Windows tuning, effective ACLs or UAC behavior. The supplied Windows workflow has
-not been run remotely. [Validation results](docs/validation-results.md) separate
+The [Windows workflow](https://github.com/pantyyy17/CARPATIA-ULTIMATE-/actions/workflows/windows.yml)
+builds the full app/helper, checks the payload and observes read-only startup.
+Its live status records the current native build/startup result. Startup survival
+does not establish visual quality or standard-user behavior; hosted CI may use
+an elevated token. No native configuration write is tested by this workflow.
+
+These suites validate isolated logic, fake-backed writes and selected read-only
+Windows integrations. [Validation results](docs/validation-results.md) separate
 executed checks from required [Windows acceptance](docs/windows-validation.md).
 
 Do not expand into Phase C until Windows Apply/Verify/Restore and failure

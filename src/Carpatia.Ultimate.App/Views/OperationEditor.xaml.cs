@@ -13,7 +13,7 @@ public sealed partial class OperationEditor : UserControl
         InitializeComponent();
         Loaded += Editor_Loaded;
     }
-    public static Visibility BusyVisibility(bool busy) => busy ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility BusyVisibility(bool busy) => busy ? Visibility.Visible : Visibility.Collapsed;
     private async void Editor_Loaded(object sender, RoutedEventArgs args)
     {
         Loaded -= Editor_Loaded;

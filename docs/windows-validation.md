@@ -30,9 +30,16 @@ dotnet build src/Carpatia.Ultimate.App/Carpatia.Ultimate.App.csproj -c Release -
 The app build must include `Helper/Carpatia.Ultimate.Helper.exe`, its DLL,
 `.deps.json`, `.runtimeconfig.json` and runtime dependencies beneath the app output
 folder. The CI workflow tests all five projects, builds the app/helper, asserts
-that payload and retains TRX reports plus the unsigned build. It has not been run
-remotely. Tests use fake backends for writes; Windows-specific checks are read-only
+that payload and retains TRX reports plus the unsigned build. The five suites
+have run successfully on Windows. Tests use fake backends for writes; Windows-specific checks are read-only
 or parse-only and do not replace the manual cases below.
+
+The separate `Smoke-WindowsStartup.ps1` CI step observes the application process
+for 12 seconds, rejects unexpected direct helper children and stops only its
+started process. It performs no settings operation or elevation request and
+records the inherited CI token. This does not verify rendering, navigation or
+standard-user startup. The normal `Validate-Windows.ps1` runner still does not
+launch executables.
 
 ## Read-only desktop acceptance
 
