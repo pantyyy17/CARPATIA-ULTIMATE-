@@ -1,0 +1,34 @@
+<UserControl x:Class="Carpatia.Ultimate.App.Views.OperationEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel Spacing="18" Margin="4,20,4,4">
+    <TextBlock Text="REVIEW BEFORE APPLYING" Style="{StaticResource Eyebrow}" />
+    <Grid ColumnSpacing="18">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+      <ComboBox Header="Setting" ItemsSource="{x:Bind ViewModel.Choices}" SelectedItem="{x:Bind ViewModel.SelectedChoice, Mode=TwoWay}" DisplayMemberPath="Name" HorizontalAlignment="Stretch" IsEnabled="{x:Bind ViewModel.CanRead, Mode=OneWay}" />
+      <Button Grid.Column="1" VerticalAlignment="Bottom" Click="Refresh_Click" IsEnabled="{x:Bind ViewModel.CanRead, Mode=OneWay}" AutomationProperties.Name="Refresh power scheme and network adapters"><FontIcon Glyph="&#xE72C;" FontSize="14" /></Button>
+    </Grid>
+    <ContentControl IsEnabled="{x:Bind ViewModel.CanRead, Mode=OneWay}" HorizontalContentAlignment="Stretch">
+    <StackPanel Spacing="16">
+      <StackPanel Visibility="{x:Bind ViewModel.CpuVisibility}" Spacing="12">
+        <TextBlock Text="{x:Bind ViewModel.SchemeDescription, Mode=OneWay}" Style="{StaticResource BodyMuted}" IsTextSelectionEnabled="True" />
+        <ComboBox Header="Power source" SelectedIndex="{x:Bind ViewModel.SourceIndex, Mode=TwoWay}" Width="230"><x:String>Plugged in (AC)</x:String><x:String>Battery (DC)</x:String></ComboBox>
+      </StackPanel>
+      <ComboBox Header="Network adapter — select explicitly" Visibility="{x:Bind ViewModel.AdapterVisibility, Mode=OneWay}" ItemsSource="{x:Bind ViewModel.Adapters}" SelectedItem="{x:Bind ViewModel.SelectedAdapter, Mode=TwoWay}" DisplayMemberPath="Name" HorizontalAlignment="Stretch" PlaceholderText="Choose the exact interface" />
+      <ComboBox Header="Address family" Visibility="{x:Bind ViewModel.FamilyVisibility, Mode=OneWay}" SelectedIndex="{x:Bind ViewModel.FamilyIndex, Mode=TwoWay}" Width="200"><x:String>IPv4</x:String><x:String>IPv6</x:String></ComboBox>
+      <NumberBox Header="{x:Bind ViewModel.ValueHeader, Mode=OneWay}" Visibility="{x:Bind ViewModel.NumericVisibility, Mode=OneWay}" Value="{x:Bind ViewModel.NumericValue, Mode=TwoWay}" Minimum="0" Maximum="65535" SmallChange="1" SpinButtonPlacementMode="Compact" Width="270" HorizontalAlignment="Left" />
+      <StackPanel Visibility="{x:Bind ViewModel.DnsVisibility, Mode=OneWay}" Spacing="12">
+        <ComboBox Header="DNS configuration" ItemsSource="{x:Bind ViewModel.DnsChoices}" SelectedItem="{x:Bind ViewModel.DnsPreset, Mode=TwoWay}" Width="230" />
+        <TextBox Header="Ordered server addresses (comma separated)" Text="{x:Bind ViewModel.DnsServers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{x:Bind ViewModel.IsDnsCustom, Mode=OneWay}" PlaceholderText="Select Custom to enter literal IP addresses" />
+      </StackPanel>
+      <ComboBox Header="TCP receive-window auto-tuning" Visibility="{x:Bind ViewModel.TcpVisibility, Mode=OneWay}" ItemsSource="{x:Bind ViewModel.TcpLevels}" SelectedItem="{x:Bind ViewModel.TcpLevel, Mode=TwoWay}" Width="250" />
+      <ToggleSwitch Header="Receive Side Scaling" Visibility="{x:Bind ViewModel.RssVisibility, Mode=OneWay}" IsOn="{x:Bind ViewModel.Enabled, Mode=TwoWay}" OnContent="Enabled" OffContent="Disabled" />
+    </StackPanel>
+    </ContentControl>
+    <TextBlock Text="{x:Bind ViewModel.Explanation, Mode=OneWay}" Style="{StaticResource BodyMuted}" />
+    <Button Style="{StaticResource PrimaryButton}" Click="Review_Click" IsEnabled="{x:Bind ViewModel.CanRead, Mode=OneWay}"><StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE8A5;" FontSize="15" /><TextBlock Text="Read &amp; review change" /></StackPanel></Button>
+    <ProgressBar IsIndeterminate="True" Visibility="{x:Bind BusyVisibility(ViewModel.IsBusy), Mode=OneWay}" Height="3" />
+    <TextBlock Text="{x:Bind ViewModel.Message, Mode=OneWay}" Style="{StaticResource BodyMuted}" IsTextSelectionEnabled="True" />
+    <TextBlock Text="Implemented, Hardware Test Pending · Validate on a Windows test device before production use." FontSize="11" Foreground="{ThemeResource AlpineMuted}" TextWrapping="Wrap" />
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,18 @@
+<UserControl x:Class="Carpatia.Ultimate.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel Spacing="20">
+    <TextBlock Text="PREFERENCES" Style="{StaticResource Eyebrow}" Margin="0,16,0,0" />
+    <TextBlock Text="Simply yours." Style="{StaticResource PageHeading}" />
+    <TextBlock Text="A quiet interface. Transparent behavior." Style="{StaticResource BodyMuted}" />
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="15"><TextBlock Text="Appearance" Style="{StaticResource SectionHeading}" /><TextBlock Text="Choose the theme for this session. Native contrast settings remain available through Windows." Style="{StaticResource BodyMuted}" /><ComboBox Header="Application theme" SelectedIndex="0" SelectionChanged="Theme_SelectionChanged" Width="230"><x:String>Light</x:String><x:String>Dark</x:String><x:String>Use Windows setting</x:String></ComboBox></StackPanel>
+    </Border>
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="13"><TextBlock Text="Your device. Your data." Style="{StaticResource SectionHeading}" /><TextBlock Text="No telemetry, advertising, automatic optimization or elevated background service. Hardware readings stay on this device. Refresh is on demand." Style="{StaticResource BodyMuted}" /><Button Content="Copy diagnostic summary" Click="Copy_Click" /><TextBlock x:Name="CopyStatus" Style="{StaticResource BodyMuted}" /></StackPanel>
+    </Border>
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="12"><TextBlock Text="CARPATIA ULTIMATE EDITION" Style="{StaticResource SectionHeading}" /><TextBlock Text="Version 1.0.0 · Alpine Edition · Phase B preview" Style="{StaticResource BodyMuted}" /><TextBlock Text="CPU/network controls and Windows diagnostics: Implemented, Hardware Test Pending. Apply and Restore use a one-shot elevated helper. No verified performance gains are claimed." Style="{StaticResource BodyMuted}" /><TextBlock Text="Mountain photograph: Unsplash. Bundled locally; no network request is made by the app." Style="{StaticResource BodyMuted}" FontSize="12" /></StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,24 @@
+<UserControl x:Class="Carpatia.Ultimate.App.Views.RecoveryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Carpatia.Ultimate.App.ViewModels">
+  <StackPanel Spacing="20">
+    <TextBlock Text="RECOVERY" Style="{StaticResource Eyebrow}" Margin="0,16,0,0" />
+    <TextBlock Text="A record. A way back." Style="{StaticResource PageHeading}" TextWrapping="Wrap" />
+    <TextBlock Text="Original values belong to the change that created them. Recovery never restores unrelated Windows settings." Style="{StaticResource BodyMuted}" />
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="16">
+        <FontIcon Glyph="&#xE777;" FontSize="34" Foreground="{ThemeResource AlpineBlue}" HorizontalAlignment="Left" />
+        <TextBlock Text="Operation journal" Style="{StaticResource SectionHeading}" />
+        <TextBlock Text="{x:Bind ViewModel.JournalSummary, Mode=OneWay}" Style="{StaticResource BodyMuted}" />
+        <StackPanel Spacing="10"><Button Content="Read recovery records" Click="Refresh_Click" /><Button Content="Open journal folder" Click="OpenFolder_Click" /></StackPanel>
+        <TextBlock Text="{x:Bind ViewModel.JournalDirectory}" IsTextSelectionEnabled="True" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11" Foreground="{ThemeResource AlpineMuted}" />
+      </StackPanel>
+    </Border>
+    <ItemsControl ItemsSource="{x:Bind ViewModel.RecoveryRecords}">
+      <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:ActivityItem"><Border Style="{StaticResource Card}" Margin="0,0,0,12"><StackPanel Spacing="8"><TextBlock Text="{x:Bind Name}" Style="{StaticResource SectionHeading}" /><TextBlock Text="{x:Bind Detail}" Style="{StaticResource BodyMuted}" /><TextBlock Text="{x:Bind Timestamp}" FontSize="11" Foreground="{ThemeResource AlpineMuted}" /><Button Content="Review restoration" Tag="{x:Bind OperationId}" IsEnabled="{x:Bind CanRestore}" Click="Restore_Click" /></StackPanel></Border></DataTemplate></ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock x:Name="RestoreStatus" Style="{StaticResource BodyMuted}" IsTextSelectionEnabled="True" />
+    <InfoBar IsOpen="True" IsClosable="False" Severity="Informational" Title="Recovery has limits" Message="A configuration snapshot is not a full system backup. It cannot recover hardware damage or guarantee recovery from an unbootable system. External changes require review before restoration." />
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Carpatia.Ultimate.App/Carpatia.Ultimate.App.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Broker/Carpatia.Ultimate.Broker.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Control/Carpatia.Ultimate.Control.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Core/Carpatia.Ultimate.Core.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Diagnostics/Carpatia.Ultimate.Diagnostics.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Engine/Carpatia.Ultimate.Engine.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Helper/Carpatia.Ultimate.Helper.csproj" />
+    <Project Path="src/Carpatia.Ultimate.Platform.Windows/Carpatia.Ultimate.Platform.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Carpatia.Ultimate.Broker.Tests/Carpatia.Ultimate.Broker.Tests.csproj" />
+    <Project Path="tests/Carpatia.Ultimate.Control.Tests/Carpatia.Ultimate.Control.Tests.csproj" />
+    <Project Path="tests/Carpatia.Ultimate.Diagnostics.Tests/Carpatia.Ultimate.Diagnostics.Tests.csproj" />
+    <Project Path="tests/Carpatia.Ultimate.Platform.Tests/Carpatia.Ultimate.Platform.Tests.csproj" />
+    <Project Path="tests/Carpatia.Ultimate.Tests/Carpatia.Ultimate.Tests.csproj" />
+  </Folder>
+</Solution>

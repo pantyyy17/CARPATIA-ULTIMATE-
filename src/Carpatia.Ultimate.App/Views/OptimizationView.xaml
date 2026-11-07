@@ -1,0 +1,23 @@
+<UserControl x:Class="Carpatia.Ultimate.App.Views.OptimizationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel Spacing="20">
+    <TextBlock Text="OPTIMIZATION" Style="{StaticResource Eyebrow}" Margin="0,16,0,0" />
+    <TextBlock Text="Precision over promises." Style="{StaticResource PageHeading}" TextWrapping="Wrap" />
+    <TextBlock Text="Review a setting. Understand the trade-offs. Keep the original configuration." Style="{StaticResource BodyMuted}" />
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="10">
+        <TextBlock Text="Individual change review" Style="{StaticResource SectionHeading}" />
+        <TextBlock Text="Four processor policies and four network controls, each with independent compatibility checks, original-state capture, readback verification and restoration." Style="{StaticResource BodyMuted}" />
+        <TextBlock Text="Balanced / Performance / Ultra / Custom are profile targets. Automatic multi-setting profile execution remains in development until Windows recovery validation passes." FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource AlpineMuted}" />
+      </StackPanel>
+    </Border>
+    <Border Style="{StaticResource Card}">
+      <TabView IsAddTabButtonVisible="False" CanDragTabs="False" CanReorderTabs="False" TabWidthMode="Equal">
+        <TabViewItem Header="CPU" IsClosable="False"><ContentControl x:Name="CpuEditor" HorizontalContentAlignment="Stretch" /></TabViewItem>
+        <TabViewItem Header="GPU" IsClosable="False"><StackPanel Margin="4,18,4,4" Spacing="12"><TextBlock Text="Graphics, with context" Style="{StaticResource SectionHeading}" /><TextBlock Text="{x:Bind ViewModel.GpuName, Mode=OneWay}" Style="{StaticResource BodyMuted}" /><TextBlock Text="{x:Bind ViewModel.GpuDriver, Mode=OneWay}" Style="{StaticResource BodyMuted}" /><ItemsControl x:Name="GpuFeatures" ItemTemplate="{StaticResource FeatureTemplate}" /></StackPanel></TabViewItem>
+        <TabViewItem Header="Network" IsClosable="False"><ContentControl x:Name="NetworkEditor" HorizontalContentAlignment="Stretch" /></TabViewItem>
+      </TabView>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <Platforms>x64;ARM64</Platforms>
+    <Platform Condition="'$(Platform)' == '' Or '$(Platform)' == 'AnyCPU'">x64</Platform>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RootNamespace>Carpatia.Ultimate.App</RootNamespace>
+    <AssemblyName>Carpatia.Ultimate</AssemblyName>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="2.6.5" />
+    <ProjectReference Include="../Carpatia.Ultimate.Core/Carpatia.Ultimate.Core.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Engine/Carpatia.Ultimate.Engine.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Diagnostics/Carpatia.Ultimate.Diagnostics.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Control/Carpatia.Ultimate.Control.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Helper/Carpatia.Ultimate.Helper.csproj" ReferenceOutputAssembly="false" />
+    <Content Include="Assets/alpine.jpg" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="CopyOneShotHelper" AfterTargets="Build">
+    <MSBuild Projects="../Carpatia.Ultimate.Helper/Carpatia.Ultimate.Helper.csproj" Targets="GetTargetPath" Properties="Configuration=$(Configuration);Platform=$(Platform);RuntimeIdentifier=$(RuntimeIdentifier)">
+      <Output TaskParameter="TargetOutputs" ItemName="HelperTargetPath" />
+    </MSBuild>
+    <PropertyGroup>
+      <HelperOutputDirectory>@(HelperTargetPath->'%(RootDir)%(Directory)')</HelperOutputDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <HelperPayload Include="$(HelperOutputDirectory)**/*" />
+    </ItemGroup>
+    <Error Condition="!Exists('$(HelperOutputDirectory)Carpatia.Ultimate.Helper.exe')" Text="The one-shot helper executable was not built for the selected configuration and runtime." />
+    <Copy SourceFiles="@(HelperPayload)" DestinationFiles="@(HelperPayload->'$(TargetDir)Helper/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

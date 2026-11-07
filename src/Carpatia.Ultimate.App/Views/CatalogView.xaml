@@ -1,0 +1,18 @@
+<UserControl x:Class="Carpatia.Ultimate.App.Views.CatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel Spacing="20">
+    <TextBlock Text="SYSTEM CONTROL" Style="{StaticResource Eyebrow}" Margin="0,16,0,0" />
+    <TextBlock Text="{x:Bind Heading}" Style="{StaticResource PageHeading}" TextWrapping="Wrap" />
+    <TextBlock Text="{x:Bind Description}" Style="{StaticResource BodyMuted}" />
+    <InfoBar IsOpen="True" IsClosable="False" Severity="Informational" Title="In Development" Message="This page is a capability roadmap. No system controls or removal actions are enabled in Phase A." />
+    <Border Style="{StaticResource Card}"><ItemsControl ItemsSource="{x:Bind Features}" ItemTemplate="{StaticResource FeatureTemplate}" /></Border>
+    <Border Style="{StaticResource Card}">
+      <StackPanel Spacing="10">
+        <TextBlock Text="The same standard for every change." Style="{StaticResource SectionHeading}" />
+        <TextBlock Text="Compatibility → Read → Validate → Preview → Record → Apply → Verify → Restore" Style="{StaticResource BodyMuted}" />
+        <TextBlock Text="A successful command is not proof that a setting changed. The engine reads the state again and records the verified result." Style="{StaticResource BodyMuted}" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

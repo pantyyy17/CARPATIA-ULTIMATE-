@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Carpatia.Ultimate.Platform.Windows/Carpatia.Ultimate.Platform.Windows.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Broker/Carpatia.Ultimate.Broker.csproj" />
+    <ProjectReference Include="../Carpatia.Ultimate.Engine/Carpatia.Ultimate.Engine.csproj" />
+  </ItemGroup>
+</Project>

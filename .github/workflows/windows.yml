@@ -1,0 +1,62 @@
+name: Windows build and Phase B tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.403
+      - name: Test engine and persistent recovery
+        run: dotnet test tests/Carpatia.Ultimate.Tests/Carpatia.Ultimate.Tests.csproj --configuration Release --logger "trx;LogFileName=engine.trx" --results-directory TestResults
+      - name: Test typed review and control flow
+        run: dotnet test tests/Carpatia.Ultimate.Control.Tests/Carpatia.Ultimate.Control.Tests.csproj --configuration Release --logger "trx;LogFileName=control.trx" --results-directory TestResults
+      - name: Test broker protocol and security-policy logic
+        run: dotnet test tests/Carpatia.Ultimate.Broker.Tests/Carpatia.Ultimate.Broker.Tests.csproj --configuration Release --logger "trx;LogFileName=broker.trx" --results-directory TestResults
+      - name: Test CPU and network adapters
+        run: dotnet test tests/Carpatia.Ultimate.Platform.Tests/Carpatia.Ultimate.Platform.Tests.csproj --configuration Release --logger "trx;LogFileName=platform.trx" --results-directory TestResults
+      - name: Test diagnostics
+        run: dotnet test tests/Carpatia.Ultimate.Diagnostics.Tests/Carpatia.Ultimate.Diagnostics.Tests.csproj --configuration Release --logger "trx;LogFileName=diagnostics.trx" --results-directory TestResults
+      - name: Build unpackaged desktop application and helper
+        run: dotnet build src/Carpatia.Ultimate.App/Carpatia.Ultimate.App.csproj --configuration Release --runtime win-x64 -p:Platform=x64 -p:WindowsPackageType=None
+      - name: Check packaged one-shot helper
+        shell: pwsh
+        run: |
+          $appDirectory = Join-Path $PWD 'src/Carpatia.Ultimate.App/bin/x64/Release/net10.0-windows10.0.19041.0/win-x64'
+          $required = @(
+            'Carpatia.Ultimate.exe',
+            'Helper/Carpatia.Ultimate.Helper.exe',
+            'Helper/Carpatia.Ultimate.Helper.dll',
+            'Helper/Carpatia.Ultimate.Helper.deps.json',
+            'Helper/Carpatia.Ultimate.Helper.runtimeconfig.json'
+          )
+          foreach ($relative in $required) {
+            $path = Join-Path $appDirectory $relative
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+              throw "Required app/helper payload is missing: $relative"
+            }
+          }
+          Write-Host 'App and one-shot helper payloads are present. No configuration operation was executed.'
+      - name: Retain test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-results
+          path: TestResults/*.trx
+          if-no-files-found: warn
+      - name: Retain unsigned build for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: carpatia-ultimate-unsigned-win-x64
+          path: src/Carpatia.Ultimate.App/bin/x64/Release/**
+          if-no-files-found: error
