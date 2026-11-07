@@ -6,6 +6,8 @@
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <UseWinUI>true</UseWinUI>
+    <!-- .NET 10 supplies image Content items; avoid WinUI's overlapping Assets glob. -->
+    <EnableDefaultAssets>false</EnableDefaultAssets>
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <SelfContained>true</SelfContained>
@@ -25,7 +27,7 @@
     <ProjectReference Include="../Carpatia.Ultimate.Diagnostics/Carpatia.Ultimate.Diagnostics.csproj" />
     <ProjectReference Include="../Carpatia.Ultimate.Control/Carpatia.Ultimate.Control.csproj" />
     <ProjectReference Include="../Carpatia.Ultimate.Helper/Carpatia.Ultimate.Helper.csproj" ReferenceOutputAssembly="false" />
-    <Content Include="Assets/alpine.jpg" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Assets/alpine.jpg" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <Target Name="CopyOneShotHelper" AfterTargets="Build">
     <MSBuild Projects="../Carpatia.Ultimate.Helper/Carpatia.Ultimate.Helper.csproj" Targets="GetTargetPath" Properties="Configuration=$(Configuration);Platform=$(Platform);RuntimeIdentifier=$(RuntimeIdentifier)">
